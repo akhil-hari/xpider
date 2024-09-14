@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.5
+    hooks:
+      - id: ruff
+        name: Ruff lint
+        stages: [commit]
+        args: [--fix]  # This will automatically fix linting issues
+
+      - id: ruff
+        name: Ruff format
+        stages: [commit]
+        args: [--fix]  # For fixing only formatting issues
