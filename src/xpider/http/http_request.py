@@ -14,14 +14,16 @@ class Request:
         method: str = "get",
         timeout: int = 20,
         proxy: Optional[dict] = None,
+        meta:Optional[dict] = None
     ):
         self.url = url
-        self.callback = callback
+        self.callback = callback if isinstance(callback, str) or None else callback.__name__ # type: ignore[union-attr]
         self.headers = headers
         self.cookies = cookies
         self.method = method
         self.timeout = timeout
         self.proxy = proxy
+        self.meta = meta
     
     
     def add_request_id(self):
@@ -41,11 +43,27 @@ class Request:
                 cookies=self.cookies,
                 proxy=self.proxy,
             )
-            response = Response(raw_response)
+            response = Response(raw_response, self)
             return response
 
 
 
 class Response:
-    def _init__(self, raw_response):
-        pass
+    def _init__(self, raw_response, request:Request):
+        self.url = raw_response.url
+        self.text = raw_response.text
+        self.content =  raw_response.content
+        self.headers = raw_response.headers
+        self.cookies = raw_response.cookies
+        self.status_code = raw_response.status_code
+        self.request = request
+        self.meta = request.meta
+    
+    def to_json(self):
+        return {
+            "url": self.url,
+            "headers": self.headers,
+            "cookies": self.cookies,
+            "status_code": self.status_code,
+            "request": self.request.to_json()
+        }
