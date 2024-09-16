@@ -7,9 +7,10 @@ readme = "README.md"
 packages = [{include = "xpider", from = "src"}]
 
 [tool.poetry.dependencies]
-python = ">=3.11"
+python = ">=3.11,<4.0"
 httpx = {extras = ["brotli", "http2", "zstd"], version = ">=0.27.2"}
 pydantic = "^2.9.1"
+influxdb-client = "^1.46.0"
 
 
 [build-system]
