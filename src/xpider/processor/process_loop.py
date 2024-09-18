@@ -26,7 +26,7 @@ class ProcessLoop(Singleton):
         self.queue = QueueFactory.create_queue()
         self.spider_object = spider_class()
         self.data_gatherer = DataGathererFactory.create_data_gatherer()
-        setattr(self.spider_object, "logger",    getLogger("xpider-callback-logs"))
+        setattr(self.spider_object, "logger", getLogger("xpider-callback-logs"))
 
     async def __worker_function__(self):
         while True:
