@@ -1,0 +1,23 @@
+from xpider.http.http_request import Request, Response
+from xpider.runner import runner
+from lxml import html
+from .items.page import Page
+
+
+class Spider:
+    def __init__(self):
+        self.name = "{name}"
+
+    def start_crawl(self):
+        url = "https://example.com"
+        yield Request(url, meta={{"url": url}}, callback="parse")
+
+    def parse(self, response: Response):
+        url = response.meta["url"]
+        parser = html.fromstring(response.content)
+        title = parser.xpath("//title/text()")[0]
+        yield Page(url=url, title=title)
+
+
+if __name__ == "__main__":
+    runner()

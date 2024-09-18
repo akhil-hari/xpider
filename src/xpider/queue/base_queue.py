@@ -10,7 +10,7 @@ class BaseQueue(ABC):
     @abstractmethod
     def dequeue(self) -> Tuple[str, dict]:
         pass
- 
+
     @abstractmethod
     def acknowledge(self, id_str: str):
         pass

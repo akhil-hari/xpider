@@ -1,4 +1,6 @@
-import re 
+import re
+
+
 def snake_case(name):
     name = name.strip(" _")
     name = name.lower()
