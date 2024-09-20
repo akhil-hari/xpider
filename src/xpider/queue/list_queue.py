@@ -5,7 +5,7 @@ from xpider.utils.singleton import Singleton
 
 
 class ListQueue(BaseQueue, Singleton):
-    def __init__(self):
+    def __init__(self, settings:dict):
         self.__queue__ = []
         self.__no_ack_set__ = set()
 

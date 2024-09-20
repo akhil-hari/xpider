@@ -19,13 +19,15 @@ class ProcessLoop(Singleton):
     # def __init__(self, spider_class: Type[object]):
         if not hasattr(spider_class, "start_crawl"):
             raise AttributeError("No `start_crawl` method defined in spider class")
-        self.max_threads = 5
-        self.max_retry = 20
+        self.name = settings.get("name")
+        self.max_threads = settings.get("threads", 5)
+        self.max_retry = settings.get("max_retry", 20)
+        self.proxy = settings.get("proxy")
         self.loop = asyncio.get_event_loop()
         self.stop_flag = False
-        self.queue = QueueFactory.create_queue()
+        self.queue = QueueFactory.create_queue(settings)
         self.spider_object = spider_class()
-        self.data_gatherer = DataGathererFactory.create_data_gatherer()
+        self.data_gatherer = DataGathererFactory.create_data_gatherer(settings)
         setattr(self.spider_object, "logger", getLogger("xpider-callback-logs"))
 
     async def __worker_function__(self):
