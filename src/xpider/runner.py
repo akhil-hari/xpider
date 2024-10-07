@@ -8,9 +8,10 @@ from xpider.processor.process_loop import ProcessLoop
 from os import environ
 from typing import Optional
 
-def update_settings(settings:dict,project_name:str, cmd_args:Optional[dict]=None):
-    mongo_url = cmd_args.get("mongo_url", None) if cmd_args is not None  else None
-    redis_url = cmd_args.get("redis_url", None) if cmd_args is not None  else None
+
+def update_settings(settings: dict, project_name: str, cmd_args: Optional[dict] = None):
+    mongo_url = cmd_args.get("mongo_url", None) if cmd_args is not None else None
+    redis_url = cmd_args.get("redis_url", None) if cmd_args is not None else None
     mongo_url = environ.get("XPIDER_MONGO_URL") if mongo_url is None else mongo_url
     redis_url = environ.get("XPIDER_REDIS_URL") if redis_url is None else redis_url
     settings["mongo_url"] = mongo_url
@@ -18,13 +19,14 @@ def update_settings(settings:dict,project_name:str, cmd_args:Optional[dict]=None
     settings["name"] = project_name
 
 
-
-
-
-def runner(cmd_args:Optional[dict]=None):
+def runner(cmd_args: Optional[dict] = None):
     cmd_args = cmd_args if cmd_args is not None else {}
-    project_root =  cmd_args.get("path")
-    project_root = Path(project_root) if project_root is not None else locate_config(Path(getcwd()), "xpider.toml", file=False)
+    project_root = cmd_args.get("path")
+    project_root = (
+        Path(project_root)
+        if project_root is not None
+        else locate_config(Path(getcwd()), "xpider.toml", file=False)
+    )
     if project_root:
         project_file = project_root / "xpider.toml"
         with open(project_file) as project_object:

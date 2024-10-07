@@ -51,11 +51,10 @@ class Request:
         request_object.add_request_id(request_id, retry_count)
         return request_object
 
-    def update_na(self,obj, key, value):
-        obj[key] = obj[key] if  obj.get(key) is not None else value
+    def update_na(self, obj, key, value):
+        obj[key] = obj[key] if obj.get(key) is not None else value
 
-
-    async def send(self,timeout:Optional[int]=None, proxy:Optional[dict]=None):
+    async def send(self, timeout: Optional[int] = None, proxy: Optional[dict] = None):
         async with AsyncClient() as client:
             request_json = self.to_json()
             self.update_na(request_json, "timeout", timeout)

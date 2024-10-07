@@ -10,7 +10,7 @@ def generate_project(name: str):
     project_path = current_path / project_name
     code_path = project_path / f"src/{project_name}"
     try:
-        (code_path/"items").mkdir(parents=True)
+        (code_path / "items").mkdir(parents=True)
 
     except Exception as error:
         print(error)
@@ -51,7 +51,7 @@ def generate_project(name: str):
                 "description": description,
                 "authors": authors,
                 "license": "none",
-                "packages": [{"include":name, "from":"src"}],
+                "packages": [{"include": name, "from": "src"}],
                 "dependencies": {
                     "python": ">=3.11,<4.0",
                     "xpider": "*",
@@ -73,13 +73,12 @@ def generate_project(name: str):
     dump(poetry_dict, (project_path / "poetry.toml").open("w"))
     generate_python_files(code_path, project_name)
 
-def generate_python_files(code_path:Path, name:str):
+
+def generate_python_files(code_path: Path, name: str):
     page_py = code_path / "items/page.py"
     main_py = code_path / "main.py"
-    
+
     template_base = Path(__file__).parent / "python_file_template"
-    
+
     page_py.open("w").write((template_base / "page").open().read())
     main_py.open("w").write((template_base / "main").open().read().format(name=name))
-
-

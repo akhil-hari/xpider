@@ -16,8 +16,8 @@ logger = getLogger("xpider-network-logs")
 
 
 class ProcessLoop(Singleton):
-    def __init__(self, spider_class:Type[object], settings:dict):
-    # def __init__(self, spider_class: Type[object]):
+    def __init__(self, spider_class: Type[object], settings: dict):
+        # def __init__(self, spider_class: Type[object]):
         if not hasattr(spider_class, "start_crawl"):
             raise AttributeError("No `start_crawl` method defined in spider class")
         self.settings = settings
@@ -54,7 +54,6 @@ class ProcessLoop(Singleton):
                         request.retry += 1
                         retry_flag = True
 
-                
                 if retry_flag:
                     request_json = request.to_json()
                     request_json.pop("requestId")

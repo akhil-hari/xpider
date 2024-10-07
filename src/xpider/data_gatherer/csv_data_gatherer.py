@@ -5,8 +5,7 @@ from csv import DictWriter, QUOTE_ALL
 
 
 class CSVDataGatherer(BaseDataGatherer):
-
-    def __init__(self, settings:dict):
+    def __init__(self, settings: dict):
         pass
 
     def write(self, dataset: str, data: BaseModel):
