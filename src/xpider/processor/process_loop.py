@@ -6,6 +6,7 @@ from xpider.queue.queue_factory import QueueFactory
 from xpider.data_gatherer.data_gatherer_factory import DataGathererFactory
 from xpider.utils.singleton import Singleton
 from xpider.http.http_request import Request
+from xpider.processor.multi_runner_lock import MultiRunnerLock
 
 from logging import getLogger
 from pydantic import BaseModel
@@ -19,6 +20,7 @@ class ProcessLoop(Singleton):
     # def __init__(self, spider_class: Type[object]):
         if not hasattr(spider_class, "start_crawl"):
             raise AttributeError("No `start_crawl` method defined in spider class")
+        self.settings = settings
         self.name = settings.get("name")
         self.max_threads = settings.get("threads", 5)
         self.max_retry = settings.get("max_retry", 20)
@@ -28,6 +30,8 @@ class ProcessLoop(Singleton):
         self.queue = QueueFactory.create_queue(settings)
         self.spider_object = spider_class()
         self.data_gatherer = DataGathererFactory.create_data_gatherer(settings)
+        setattr(self.spider_object, "process_loop", self)
+        setattr(self.spider_object, "settings", settings)
         setattr(self.spider_object, "logger", getLogger("xpider-callback-logs"))
 
     async def __worker_function__(self):
@@ -95,10 +99,11 @@ class ProcessLoop(Singleton):
 
     def start(self):
         # self.queue.enqueue(request.to_json())
-        self.process_results(self.spider_object.start_crawl())
-        tasks = []
-        for _ in range(self.max_threads):
-            task = self.loop.create_task(self.__worker_function__())
-            tasks.append(task)
-        all_workers = asyncio.gather(*tasks)
-        self.loop.run_until_complete(all_workers)
+        # self.process_results(self.spider_object.start_crawl())
+        with MultiRunnerLock(self.spider_object):
+            tasks = []
+            for _ in range(self.max_threads):
+                task = self.loop.create_task(self.__worker_function__())
+                tasks.append(task)
+            all_workers = asyncio.gather(*tasks)
+            self.loop.run_until_complete(all_workers)

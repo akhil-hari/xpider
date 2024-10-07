@@ -13,6 +13,7 @@ class Request:
         cookies: Optional[dict] = None,
         data: Optional[Any] = None,
         json: Optional[Any] = None,
+        params: Optional[Any] = None,
         method: str = "get",
         timeout: int = 20,
         proxy: Optional[dict] = None,
@@ -29,6 +30,7 @@ class Request:
         self.method = method
         self.timeout = timeout
         self.proxy = proxy
+        self.params = params
         self.data = data
         self.json = json
         self.meta = meta
@@ -76,6 +78,7 @@ class Request:
             "cookies": self.cookies,
             "method": self.method,
             "timeout": self.timeout,
+            "params": self.params,
             "proxy": self.proxy,
             "meta": self.meta,
             "data": self.data,
@@ -93,6 +96,7 @@ class Response:
         self.headers = raw_response.headers
         self.cookies = raw_response.cookies
         self.status_code = raw_response.status_code
+        self.json = raw_response.json
         self.request = request
         self.meta = request.meta
 

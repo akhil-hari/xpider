@@ -2,6 +2,7 @@ import re
 
 
 def snake_case(name):
+    name = re.sub("([A-Z])", r"_\1", name)
     name = name.strip(" _")
     name = name.lower()
     name = name.replace(" ", "_")

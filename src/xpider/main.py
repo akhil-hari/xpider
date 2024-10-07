@@ -14,7 +14,6 @@ def main():
     new_parser.add_argument("name", help="Name of the project in snake case.")
     args = parser.parse_args()
     if args.operation == 'run':
-        print(args.__dict__)
         runner(args.__dict__)
     elif args.operation == 'new':
         generate_project(args.name)
